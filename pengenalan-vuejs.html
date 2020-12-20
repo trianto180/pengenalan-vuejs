@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengenalan Vuejs</title>
+</head>
+<body>
+    <div id="app">
+        <div v-for="(comment, index) in comments" :keys="index">
+            <br>
+            <button  @click="plus(index)">+</button>
+            <p>{{ comment.komentar }} || {{ comment.tanggal }} || Score : {{ comment.score }}</p>
+            <button  @click="min(index)">-</button>
+        </div>
+        <br>
+        <textarea v-model="newComment" @keydown.13="createComment"></textarea>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script>
+        var vm = new Vue ({
+            el: '#app',
+
+            data() {
+                return {
+                    newComment: '',
+                    comments: [
+                        {
+                            'komentar': 'Komentar 1',
+                            'tanggal': '21-12-2020',
+                            'score': 0,
+                            'plus': false,
+                            'min': false,
+                        },
+                        {
+                            'komentar': 'Komentar 2',
+                            'tanggal': '21-12-2020',
+                            'score': 5,
+                            'plus': false,
+                            'min': false,
+                        },
+                        {
+                            'komentar': 'Komentar 3',
+                            'tanggal': '21-12-2020',
+                            'score': 4,
+                            'plus': false,
+                            'min': false,
+                        },
+                    ]
+                }
+            },
+
+            methods: {
+                createComment() {
+                    let now = new Date()
+                    let date = now.getDate()
+                    let month = now.getMonth() + 1
+                    let year = now.getFullYear()
+
+                    this.comments.push({
+                        'komentar': this.newComment,
+                        'tanggal': `${date}-${month}-${year}`,
+                        'score': 0,
+                        'plus': false,
+                        'min': false,
+                    })
+                    this.newComment = ''
+                },
+
+                plus(index) {
+                    let comment = this.comments[index]
+                    if(comment.min) {
+                        comment.min = false
+                        comment.score += 1
+                        return
+                    }
+                    comment.plus = !comment.plus
+                    if(comment.plus) {
+                        comment.score += 1
+                    } else {
+                        comment.score -= 1
+                    } 
+                },
+
+                min(index) {
+                    let comment = this.comments[index]
+                    if(comment.plus) {
+                        comment.plus = false
+                        comment.score -= 1
+                        return
+                    }
+                    comment.min = !comment.min
+                    comment.min ? comment.score -= 1 : comment.score += 1
+                }
+            },
+        })
+
+    </script>
+</body>
+</html>
